@@ -1,0 +1,26 @@
+body{
+    background-color: lavender;
+}
+
+#contenedor_cuerpo{
+
+    padding-left: 40px;
+    padding-right: 40px;
+}
+
+#boton_compilar{
+float: right;
+    margin-top: 20px;
+}
+#exampleFormControlTextarea1{
+    background-color: white;
+}
+
+#boton_guardar:hover, #boton_cargar:hover, #boton_salir:hover{
+    cursor: pointer;
+}
+
+#cargar_archivo{
+    position: absolute;
+    top: -1000px;
+}
