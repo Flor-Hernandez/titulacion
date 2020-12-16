@@ -1,4 +1,4 @@
-package com.bolsadeideas.springboot.form.app;
+package com.fho.titulacion.app;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

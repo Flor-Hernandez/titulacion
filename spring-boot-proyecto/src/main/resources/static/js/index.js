@@ -36,7 +36,30 @@ $("#boton_salir").click(function(){
   window.location.replace("https://www.google.com");
 });
 
+$("#boton_compilar").click(function(){
+	
+	var peticion = {
+			lenguaje: $("#lenguage-select").val(),
+			codigo: $("#codigo").val()
+	}
+	
+	 $.ajax
+	    ({
+	        type: "POST",
+	        //the url where you want to sent the userName and password to
+	        url: '/api/compilar',
+	        contentType: 'application/json',
+	        async: false,
+	        //json object to sent to the authentication url
+	        data: JSON.stringify(peticion),
+	        success: function (data) {
 
+	        alert("Thanks!"); 
+	        }
+	    })
+	//alert(JSON.stringify(peticion))
+	
+});
 
 
 });
