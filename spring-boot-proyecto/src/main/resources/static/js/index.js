@@ -54,7 +54,7 @@ $("#boton_compilar").click(function(){
 	        data: JSON.stringify(peticion),
 	        success: function (data) {
 
-	        alert("Thanks!"); 
+	        alert(JSON.stringify(data)); 
 	        }
 	    })
 	//alert(JSON.stringify(peticion))
