@@ -26,8 +26,19 @@ public class CompiladorController {
    public ResponseEntity<String> compilar(@RequestBody CompileRequestDTO request) {
 	   
 	  String resultado = codigoService.crearArchivo(request.getCodigo());
-	   return ResponseEntity.ok(resultado);
 	   
-   }
+	  if(resultado == "creado" ) {
+		 String command = "CCSC +FM +FH C:\\Users\\florh\\git\\titulacion\\spring-boot-proyecto\\compilados\\archivo.c";
+	     try {
+			Runtime.getRuntime().exec(command);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	     
+	  }
+	  
+	  return ResponseEntity.ok(resultado);
  
+}
 }
