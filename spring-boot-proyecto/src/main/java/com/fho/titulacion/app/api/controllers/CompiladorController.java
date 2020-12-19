@@ -2,15 +2,21 @@ package com.fho.titulacion.app.api.controllers;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.apache.commons.io.IOUtils;
 
 import com.fho.titulacion.app.dto.CompileRequestDTO;
 import com.fho.titulacion.app.service.implementations.CodigoService;
@@ -19,26 +25,39 @@ import com.fho.titulacion.app.service.implementations.CodigoService;
 @RequestMapping("/api/compilar")
 public class CompiladorController {
 
+	private final Path root = Paths.get("compilados");
 	@Autowired
 	CodigoService codigoService;
 	
-   @PostMapping
-   public ResponseEntity<String> compilar(@RequestBody CompileRequestDTO request) {
+   @PostMapping(produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+   public @ResponseBody byte[] compilar(@RequestBody CompileRequestDTO request) {
 	   
-	  String resultado = codigoService.crearArchivo(request.getCodigo());
-	   
+	  String resultado =codigoService.crearArchivo(request.getCodigo());
+	  
 	  if(resultado == "creado" ) {
 		 String command = "CCSC +FM +FH C:\\Users\\florh\\git\\titulacion\\spring-boot-proyecto\\compilados\\archivo.c";
 	     try {
+	    	 Thread.sleep(2000);
 			Runtime.getRuntime().exec(command);
-		} catch (IOException e) {
+			Thread.sleep(2000);
+		    File hex = new File(root.resolve("archivo.hex").toString());
+		    
+		    if(hex.exists() && hex.canRead()) {
+		    	Path ruta = root.resolve("archivo.hex");//.toAbsolutePath().toString();
+		    	byte[] res = Files.readAllBytes(ruta);
+		    	return res;
+		    }
+		    
+	     } catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return null;
 		}
+	    
+	     
 	     
 	  }
+	return null;
 	  
-	  return ResponseEntity.ok(resultado);
- 
 }
 }
