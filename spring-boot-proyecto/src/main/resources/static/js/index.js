@@ -43,11 +43,15 @@ $("#boton_compilar").click(function(){
 			codigo: $("#codigo").val()
 	}
 	
+	var destino = '/api/compilar/' + $("#lenguage-select").val().toLowerCase();
+	
+	//alert(destino);
+	//return;
 	 $.ajax
 	    ({
 	        type: "POST",
 	        //the url where you want to sent the userName and password to
-	        url: '/api/compilar',
+	        url: destino,
 	        contentType: 'application/json',
 	        async: false,
 	        //json object to sent to the authentication url

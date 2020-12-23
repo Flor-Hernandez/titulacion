@@ -30,6 +30,7 @@ public class CompiladorController {
 	CodigoService codigoService;
 	
    @PostMapping(produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+   @RequestMapping("/c")
    public @ResponseBody byte[] compilar(@RequestBody CompileRequestDTO request) {
 	   
 	  String resultado =codigoService.crearArchivo(request.getCodigo());
@@ -60,4 +61,38 @@ public class CompiladorController {
 	return null;
 	  
 }
+   
+   @PostMapping(produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+   @RequestMapping("/asm")
+   public @ResponseBody byte[] compilarAsm(@RequestBody CompileRequestDTO request) {
+	   
+	  String resultado =codigoService.crearArchivoAsm(request.getCodigo());
+	  
+	  if(resultado == "creado" ) {
+		 String command = "C:\\Program Files (x86)\\Microchip\\MPASM Suite\\MPASMWIN.exe /e /l C:\\Users\\florh\\git\\titulacion\\spring-boot-proyecto\\compilados\\archivoasm";
+	     try {
+	    	 Thread.sleep(2000);
+			Runtime.getRuntime().exec(command);
+			Thread.sleep(2000);
+		    File hex = new File(root.resolve("archivoasm.hex").toString());
+		    
+		    if(hex.exists() && hex.canRead()) {
+		    	Path ruta = root.resolve("archivoasm.hex");//.toAbsolutePath().toString();
+		    	byte[] res = Files.readAllBytes(ruta);
+		    	return res;
+		    }
+		    
+	     } catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	    
+	     
+	     
+	  }
+	return null;
+	  
+}
+   
 }
