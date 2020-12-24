@@ -57,8 +57,14 @@ $("#boton_compilar").click(function(){
 	        //json object to sent to the authentication url
 	        data: JSON.stringify(peticion),
 	        success: function (data) {
-                //alert(data);
-	        	var blob = new Blob([data], { type: "text/plain;charset=utf-8" });
+                //alert(JSON.stringify(data));
+	        	if(data.hasError == true){
+	        		$("#errorMessage").text(data.errorMessage);
+	        		$("#errorMessage").css("display","block");
+	        		return;
+	        	}
+	        	$("#errorMessage").css("display","none");
+	        	var blob = new Blob([data.hex], { type: "text/plain;charset=utf-8" });
 	            saveAs(blob, "codigo_pic.hex");
 
 	        	

@@ -6,9 +6,11 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.apache.commons.io.IOUtils;
 
 import com.fho.titulacion.app.dto.CompileRequestDTO;
+import com.fho.titulacion.app.response.entities.HexResponse;
 import com.fho.titulacion.app.service.implementations.CodigoService;
 
 @RestController
@@ -31,13 +34,15 @@ public class CompiladorController {
 	
    @PostMapping(produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
    @RequestMapping("/c")
-   public @ResponseBody byte[] compilar(@RequestBody CompileRequestDTO request) {
+   //public @ResponseBody byte[] compilar(@RequestBody CompileRequestDTO request) {
+   public ResponseEntity<HexResponse> compilar(@RequestBody CompileRequestDTO request) {
 	   
 	  String resultado =codigoService.crearArchivo(request.getCodigo());
 	  
 	  if(resultado == "creado" ) {
 		 String command = "CCSC +FM +FH C:\\Users\\florh\\git\\titulacion\\spring-boot-proyecto\\compilados\\archivo.c";
-	     try {
+	     HexResponse response = null;
+		 try {
 	    	 Thread.sleep(2000);
 			Runtime.getRuntime().exec(command);
 			Thread.sleep(2000);
@@ -46,13 +51,39 @@ public class CompiladorController {
 		    if(hex.exists() && hex.canRead()) {
 		    	Path ruta = root.resolve("archivo.hex");//.toAbsolutePath().toString();
 		    	byte[] res = Files.readAllBytes(ruta);
-		    	return res;
+		    	
+		    	response = new HexResponse(res, false, "");
+		    	
+		    	return ResponseEntity.ok(response);
 		    }
+		    
+		    File err = new File(root.resolve("archivo.err").toString());
+		    
+		    if(err.exists() && err.canRead()) {
+		    	
+		    	Path ruta = root.resolve("archivo.err");//.toAbsolutePath().toString();
+		    	List<String> res = Files.readAllLines(ruta);//.readAllBytes(ruta);
+		    	res.remove(0);
+		    	
+		    	String errorString = "";
+		    	
+		    	for(String s : res) {
+		    		errorString += s + System.getProperty("line.separator");
+		    	}
+		    	
+		    	response = new HexResponse(null, true, errorString);
+		    	
+		    	return ResponseEntity.ok(response);
+		    }
+		    
 		    
 	     } catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return null;
+			response = new HexResponse(null, true, e.getMessage());
+	    				
+			return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED)
+					             .body(response);
 		}
 	    
 	     
