@@ -8,10 +8,11 @@ body{
     padding-right: 40px;
 }
 
-#boton_compilar{
-float: right;
-    margin-top: 20px;
-}
+/* #boton_compilar{ */
+/* float: right; */
+/*     margin-top: 20px; */
+/* } */
+
 #exampleFormControlTextarea1{
     background-color: white;
 }
