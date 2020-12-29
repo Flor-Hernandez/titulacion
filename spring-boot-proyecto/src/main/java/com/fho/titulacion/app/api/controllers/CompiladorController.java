@@ -95,9 +95,10 @@ public class CompiladorController {
    
    @PostMapping(produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
    @RequestMapping("/asm")
-   public @ResponseBody byte[] compilarAsm(@RequestBody CompileRequestDTO request) {
+   public @ResponseBody ResponseEntity<HexResponse> compilarAsm(@RequestBody CompileRequestDTO request) {
 	   
 	  String resultado =codigoService.crearArchivoAsm(request.getCodigo());
+	  HexResponse response = new HexResponse();
 	  
 	  if(resultado == "creado" ) {
 		 String command = "C:\\Program Files (x86)\\Microchip\\MPASM Suite\\MPASMWIN.exe /e /l C:\\Users\\florh\\git\\titulacion\\spring-boot-proyecto\\compilados\\archivoasm";
@@ -110,13 +111,39 @@ public class CompiladorController {
 		    if(hex.exists() && hex.canRead()) {
 		    	Path ruta = root.resolve("archivoasm.hex");//.toAbsolutePath().toString();
 		    	byte[] res = Files.readAllBytes(ruta);
-		    	return res;
+		    	
+		    	response.setHex(res);
+		    	response.setErrotMessage(null);
+		    	response.setHasError(false);
+		    	
+		    	return ResponseEntity.ok(response);
+		    }
+
+		    File err = new File(root.resolve("archivoasm.ERR").toString());
+		    
+		    if(err.exists() && err.canRead()) {
+		    	
+		    	Path ruta = root.resolve("archivoasm.ERR");//.toAbsolutePath().toString();
+		    	List<String> res = Files.readAllLines(ruta);//.readAllBytes(ruta);		    	
+	
+		    	String errorString = "";
+		    	
+		    	for(String s : res) {
+		    		errorString += s + System.getProperty("line.separator");
+		    	}
+		    	
+		    	response = new HexResponse(null, true, errorString);
+		    	
+		    	return ResponseEntity.ok(response);
 		    }
 		    
 	     } catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return null;
+			response.setHex(null);
+			response.setHasError(true);
+		    response.setErrotMessage(e.getMessage());
+			return ResponseEntity.ok(response);
 		}
 	    
 	     
