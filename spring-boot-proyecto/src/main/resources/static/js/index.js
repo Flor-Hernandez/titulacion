@@ -2,7 +2,7 @@ $(document).ready(function(){
 
 $("#boton_guardar").click(function(){
 
-    var codigo = $("#exampleFormControlTextarea1").val();
+    var codigo = $("#codigo").val();
     var blob = new Blob([codigo], { type: "text/plain;charset=utf-8" });
     saveAs(blob, "codigo_pic.txt");
 
@@ -10,14 +10,14 @@ $("#boton_guardar").click(function(){
 });
 
 $("#cargar_archivo").change(function(){
-     
+     //alert("entro");
     var file = this.files[0];
 
   var reader = new FileReader();
   reader.onload = function(progressEvent){
     // Entire file
-    //console.log(this.result);
-    $("#exampleFormControlTextarea1").val(this.result);
+    //alert(this.result);
+    $("#codigo").val(this.result);
     // By lines
    // var lines = this.result.split('\n');
     //for(var line = 0; line < lines.length; line++){
@@ -25,6 +25,8 @@ $("#cargar_archivo").change(function(){
    // }
   };
   reader.readAsText(file);
+  
+  
 
 });
 
@@ -64,7 +66,7 @@ $("#boton_compilar").click(function(){
 	        		return;
 	        	}
 	        	$("#errorMessage").css("display","none");
-	        	var blob = new Blob([data.hex], { type: "text/plain;charset=utf-8" });
+	        	var blob = new Blob([data.hexString], { type: "text/plain;charset=utf-8" });
 	            saveAs(blob, "codigo_pic.hex");
 
 	        	
