@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +25,7 @@ import com.fho.titulacion.app.dto.CompileRequestDTO;
 import com.fho.titulacion.app.response.entities.HexResponse;
 import com.fho.titulacion.app.service.implementations.CodigoService;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/api/compilar")
 public class CompiladorController {
@@ -41,7 +43,7 @@ public class CompiladorController {
 		String resultado = codigoService.crearArchivo(request.getCodigo());
 
 		if (resultado == "creado") {
-			String command = "CCSC +FM +FH C:\\Users\\florh\\git\\titulacion\\spring-boot-proyecto\\compilados\\archivo.c";
+			String command = "CCSC +FH +FM C:\\Users\\florh\\git\\titulacion\\spring-boot-proyecto\\compilados\\archivo.c";
 			HexResponse response = null;
 			try {
 				Thread.sleep(2000);

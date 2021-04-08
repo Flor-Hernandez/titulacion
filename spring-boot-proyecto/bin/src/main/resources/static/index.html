@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Document</title>
+
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="css/index.css">
+
+</head>
+<body>
+
+	<div class="pos-f-t">
+
+		<div class="collapse" id="navbarToggleExternalContent">
+			<div class="bg-dark p-4">
+
+				<h5 class="text-white" id="boton_cargar">Cargar</h5>
+				<h5 id="boton_guardar" class="text-white">Guardar</h5>
+				<h5 class="text-white" id="boton_salir">Salir</h5>
+			</div>
+		</div>
+
+		<nav class="navbar navbar-dark bg-dark">
+			<button class="navbar-toggler" type="button" data-toggle="collapse"
+				data-target="#navbarToggleExternalContent"
+				aria-controls="navbarToggleExternalContent" aria-expanded="false"
+				aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+		</nav>
+
+	</div>
+
+	<br>
+	<br>
+
+	<div id="contenedor_cuerpo">
+		<input type="file" id="cargar_archivo">
+
+         <div id="errorMessage" class="alert alert-danger" style="display: none; margin-bottom: 10px;"> 
+         </div>
+
+		<div class="form-group">
+
+			<div class="form-group row">
+			
+				<label for="formGroupExampleInput" class="col-sm-1 col-form-label">Lenguaje</label> 
+				<div class="col-sm-2">
+				
+					<select id="lenguage-select"
+					class="form-control">
+					<option>C</option>
+					<option>ASM</option>
+				</select>
+			
+				</div>
+				
+				<div class="col-sm-1">
+				    <button class="btn btn-primary" type="button" id="boton_compilar">Compilar</button>
+				</div>
+				
+			</div>
+
+			<label for="exampleFormControlTextarea1">Codigo</label>
+			<textarea class="form-control" id="codigo"
+				rows="15"></textarea>
+		</div>
+		
+	</div>
+
+	<script src="https://code.jquery.com/jquery-3.5.1.js"
+		integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+		crossorigin="anonymous"></script>
+	<script
+		src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	<script
+		src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+	<script src="js/fileSaver.js"></script>
+	<script src="js/index.js"></script>
+    
+</body>
+</html>
